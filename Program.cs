@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 
 public class Program
@@ -26,14 +27,24 @@ public class Program
         const string LvlElarion = "Elarion of the Embers";
         const string MsgITBWizard = "You have reached the rank of Arcane Master!";
         const string LvlITBWizard = "ITB-Wizard the Grey";
-        
+        const string DrakeRamon = "You must demonstrate your training and enter the Dungeon of the drake Ramón the Mighty, " +
+            "where each door is protected by a digital access code beetween 1 and 5, both included.\n";
+        const string MsgDigitalCode = "Enter a number for the digital code";
+        const string MsgCorrectCode = "The correct code was: ";
+        const string MsgIncorrectCode = "The drake kicked you from the server";
+        const string NextDoor = "You pass to the next door!";
+        const string AllDoorsCorrect = "Be ready for the fight!!!";
 
         int op = 0;
         bool validInput;
         int trainingDays = 5;
         string name;
-        string levelPower = "";
         Random rnd = new Random();
+        string levelPower = "";
+        int numberCode;
+        int level;
+        int doorCounter;
+        int maxTries;
 
         do
         {
@@ -65,17 +76,18 @@ public class Program
             {
                 if (op == 1) 
                 {
-                    int level = 1;
                     Console.WriteLine(AskName);
-                    
                     name = Console.ReadLine();
+
+                    level = 1;
+
                     for (int i = 1; i <= trainingDays; i++)
                     {
-                        int rndLevel = rnd.Next(1,11);
+                        int rndLevel = rnd.Next(1, 11);
                         Console.WriteLine(MsgLevelObtained, i, rndLevel);
                         level = level + rndLevel;
-                        
                     }
+
                     Console.WriteLine(MsgPointLevel + level);
 
                     if (level < 20)
@@ -104,11 +116,62 @@ public class Program
                         levelPower = LvlITBWizard;
                     }
                     Console.WriteLine(MsgPowerLevel, name, levelPower);
-                    Console.WriteLine();
+                                        
+                }
+
+                if (op == 2)
+                {
+                    Console.WriteLine(DrakeRamon);
+
+                    doorCounter = 0;
+                    maxTries = 0;
+
+                    while (maxTries < 3 && doorCounter < 3)
+                    {
+
+                        Console.WriteLine(MsgDigitalCode);
+
+
+                        numberCode = Convert.ToInt32(Console.ReadLine());
+
+                        int rndDoorValue = rnd.Next(1, 6);
+
+                        maxTries++;
+
+                        Console.WriteLine(MsgCorrectCode + rndDoorValue);
+                        Console.WriteLine();
+
+                        if (numberCode == rndDoorValue)
+                        {
+                            doorCounter++;
+
+                            if (doorCounter != 3)
+                            {
+                                Console.WriteLine(NextDoor);
+                            }
+
+                            maxTries = 0;
+                        }
+
+                        if (doorCounter >= 3)
+                        {
+                            Console.WriteLine(AllDoorsCorrect);
+                        }
+
+                        if (maxTries >= 3)
+                        {
+                            Console.WriteLine(MsgIncorrectCode);
+                        }
+                    }
                 }
             }
+            Console.WriteLine();
         } 
 
         while (op != 0);
     }
 }
+
+
+
+
