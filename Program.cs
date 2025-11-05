@@ -13,6 +13,7 @@ public class Program
         const string MenuOptionExit = "0. Exit game";
         const string MenuPrompt = "Choose an option (1-3) - (0) to exit: ";
         const string InputErrorMessage = "Invalid input. Please enter a number between 0 and 3.";
+
         const string AskName = "What is your mage name?";
         const string MsgLevelObtained = "Level obtained day {0} : {1}";
         const string MsgPointLevel = "Your final points of level is ";
@@ -27,24 +28,39 @@ public class Program
         const string LvlElarion = "Elarion of the Embers";
         const string MsgITBWizard = "You have reached the rank of Arcane Master!";
         const string LvlITBWizard = "ITB-Wizard the Grey";
+
         const string DrakeRamon = "You must demonstrate your training and enter the Dungeon of the drake Ramón the Mighty, " +
             "where each door is protected by a digital access code beetween 1 and 5, both included.\n";
-        const string MsgDigitalCode = "Enter a number for the digital code";
+        const string MsgDigitalCode = "Enter a number for the digital code:";
         const string MsgCorrectCode = "The correct code was: ";
-        const string MsgIncorrectCode = "The drake kicked you from the server";
+        const string MsgIncorrectCode = "The drake kicked you from the server.";
         const string NextDoor = "You pass to the next door!";
         const string AllDoorsCorrect = "Be ready for the fight!!!";
+
+        const string DrakeDefeated = "Well done! You defeated the drake, it's time to loot the mine.";
+        const string NotLucky = "Today is not ur lucky day, you founded 0 bits.";
+        const string MsgLootFounded = "You found {0} bits.";
+        const string MsgTotalLootFounded = "Your total bits founded is: {0}";
+        const string goldGPU = "You have unlocked the gold GPU! Your spells now run at 120 FPS!";
+        const string integratedGPU = "Your magic card is still integrated. It's time to defeat another drake!";
 
         int op = 0;
         bool validInput;
         int trainingDays = 5;
-        string name;
+        string? name;
         Random rnd = new Random();
         string levelPower = "";
+
         int numberCode;
         int level;
         int doorCounter;
         int maxTries;
+
+        int rndLootFounded;
+        int noBits = 10; // 10% of no loot for each mine
+        int totalLootFounded = 0;
+        int excavations;
+        int maxExcavations = 5;
 
         do
         {
@@ -85,7 +101,7 @@ public class Program
                     {
                         int rndLevel = rnd.Next(1, 11);
                         Console.WriteLine(MsgLevelObtained, i, rndLevel);
-                        level = level + rndLevel;
+                        level += rndLevel;
                     }
 
                     Console.WriteLine(MsgPointLevel + level);
@@ -161,12 +177,44 @@ public class Program
                         if (maxTries >= 3)
                         {
                             Console.WriteLine(MsgIncorrectCode);
+                            totalLootFounded = 0;
                         }
+                    }
+                }
+                if (op == 3)
+                {
+                    Console.WriteLine(DrakeDefeated);
+                    excavations = 0;
+
+                    while (excavations != maxExcavations)
+                    {
+                        if (rnd.Next(noBits) == 0)
+                        {
+                            Console.WriteLine(NotLucky);
+                        }
+                        else
+                        {
+                            rndLootFounded = rnd.Next(5, 51);
+                            Console.WriteLine(MsgLootFounded, rndLootFounded);
+                            totalLootFounded += rndLootFounded;
+                        }
+                        excavations++;
+                    }
+
+                    Console.WriteLine("\n" + MsgTotalLootFounded, totalLootFounded);
+
+                    if (totalLootFounded > 200)
+                    {
+                        Console.WriteLine(goldGPU);
+                    }
+                    else
+                    {
+                        Console.WriteLine(integratedGPU);
                     }
                 }
             }
             Console.WriteLine();
-        } 
+        }
 
         while (op != 0);
     }
